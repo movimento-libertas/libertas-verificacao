@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificação de Documentos | Movimento Estudantil Libertas</title>
+
+<style>
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f4f4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.card{
+    background:white;
+    width:420px;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+.ok{
+    color:#198754;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.erro{
+    color:#dc3545;
+    font-size:28px;
+    font-weight:bold;
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+}
+
+td{
+    padding:6px;
+    vertical-align:top;
+}
+
+small{
+    color:#666;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card" id="resultado">
+Carregando...
+</div>
+
+<script>
+
+const codigo = new URLSearchParams(window.location.search).get("codigo");
+
+fetch("documentos.json")
+.then(r=>r.json())
+.then(lista=>{
+
+const doc = lista.find(d=>d.codigo===codigo);
+
+if(!doc){
+
+document.getElementById("resultado").innerHTML=`
+<div class="erro">❌ Documento não encontrado</div>
+<p>O código informado não existe em nossa base.</p>
+`;
+
+return;
+
+}
+
+document.getElementById("resultado").innerHTML=`
+
+<div class="ok">✅ Documento Autêntico</div>
+
+<table>
+
+<tr>
+<td><b>Código</b></td>
+<td>${doc.codigo}</td>
+</tr>
+
+<tr>
+<td><b>Tipo</b></td>
+<td>${doc.tipo}</td>
+</tr>
+
+<tr>
+<td><b>Emitido em</b></td>
+<td>${doc.data}</td>
+</tr>
+
+<tr>
+<td><b>Nome</b></td>
+<td>${doc.nome}</td>
+</tr>
+
+<tr>
+<td><b>Cargo</b></td>
+<td>${doc.cargo}</td>
+</tr>
+
+<tr>
+<td><b>Emitente</b></td>
+<td>Movimento Estudantil Libertas</td>
+</tr>
+
+</table>
+
+<hr>
+
+<small>
+Esta página confirma apenas a autenticidade do documento emitido pelo Movimento Estudantil Libertas.
+</small>
+
+`;
+
+});
+
+</script>
+
+</body>
+</html>
